@@ -14,14 +14,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:busybox.helloWorld"
+		"onCommand:busybox.json2go"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "busybox.helloWorld",
-				"title": "Hello World"
+				"command": "busybox.json2go",
+				"title": "Convert JSON to Go struct"
 			}
 		]
 	},
