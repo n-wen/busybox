@@ -18,14 +18,23 @@ function activate(context) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('busybox.json2go', function () {
+	let json2go = vscode.commands.registerCommand('busybox.json2go', function () {
 		// The code you place here will be executed every time your command is executed
 
 		// convert json to go struct
 		busybox.convertjson();
 	});
+	context.subscriptions.push(json2go);
 
-	context.subscriptions.push(disposable);
+	let base64encode = vscode.commands.registerCommand('busybox.b64encode', function () {
+		busybox.b64encode();
+	})
+	context.subscriptions.push(base64encode);
+
+	let base64decode = vscode.commands.registerCommand('busybox.b64decode', function () {
+		busybox.b64decode();
+	})
+	context.subscriptions.push(base64decode);
 }
 exports.activate = activate;
 

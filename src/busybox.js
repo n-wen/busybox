@@ -21,6 +21,42 @@ function convertjson() {
   }
 }
 
+function b64encode() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  var buffer = Buffer.from(text, 'utf-8')
+  var res = buffer.toString('base64');
+
+  editor.edit(editorBuilder => {
+    editorBuilder.replace(selection, res);
+    vscode.window.showInformationMessage("Base64 Encode Succeed!");
+  });
+}
+
+function b64decode() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  var buffer = Buffer.from(text, 'base64')
+  var res = buffer.toString('utf-8');
+
+  editor.edit(editorBuilder => {
+    editorBuilder.replace(selection, res);
+    vscode.window.showInformationMessage("Base64 Decode Succeed!");
+  });
+}
+
 module.exports = {
-  convertjson
+  convertjson,
+  b64encode,
+  b64decode
 }

@@ -14,14 +14,24 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:busybox.json2go"
+		"onCommand:busybox.json2go",
+		"onCommand:busybox.b64encode",
+		"onCommand:busybox.b64decode"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "busybox.json2go",
-				"title": "Convert JSON to Go struct"
+				"title": "busybox: Convert Selected JSON to Go struct"
+			},
+			{
+				"command": "busybox.b64encode",
+				"title": "busybox: Base64 Encode Selected Text"
+			},
+			{
+				"command": "busybox.b64decode",
+				"title": "busybox: Base64 Decode Selected Text"
 			}
 		]
 	},
