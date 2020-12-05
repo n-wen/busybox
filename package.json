@@ -15,6 +15,7 @@
 	],
 	"activationEvents": [
 		"onCommand:busybox.json2go",
+		"onCommand:busybox.genjson",
 		"onCommand:busybox.b64encode",
 		"onCommand:busybox.b64decode"
 	],
@@ -23,7 +24,11 @@
 		"commands": [
 			{
 				"command": "busybox.json2go",
-				"title": "busybox: Convert Selected JSON to Go struct"
+				"title": "busybox: Convert Selected JSON to Go Struct"
+			},
+			{
+				"command": "busybox.genjson",
+				"title": "busybox: Generate JSON from Go Struct"
 			},
 			{
 				"command": "busybox.b64encode",

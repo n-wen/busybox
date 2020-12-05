@@ -26,6 +26,11 @@ function activate(context) {
 	});
 	context.subscriptions.push(json2go);
 
+	let genjson = vscode.commands.registerCommand('busybox.genjson', function () {
+		busybox.convertgosturct();
+	})
+	context.subscriptions.push(genjson)
+
 	let base64encode = vscode.commands.registerCommand('busybox.b64encode', function () {
 		busybox.b64encode();
 	})
