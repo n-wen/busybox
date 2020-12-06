@@ -7,6 +7,7 @@
 	},
 	"description": "toolkits(json2go, base64 encode, decode, timestamp etc.)",
 	"version": "0.4.0",
+	"icon": "./busybox.png",
 	"engines": {
 		"vscode": "^1.51.0"
 	},
