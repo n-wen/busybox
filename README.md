@@ -9,10 +9,12 @@ This project is to collect and bring them to VSCode.
 ## Features
 
 - Convert json to go struct
+- Generate json from go struct
+- Encode / Decode base64 text
 
 ## TODO
 
-- Base64 encode and decode
+- Timestamp parsing and formating
 
 
 **Contributing**

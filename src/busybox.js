@@ -31,11 +31,8 @@ function convertgosturct() {
   var selection = editor.selection;
   var text = editor.document.getText(selection);
   var res = gostruct2json.gostruct2json(text);
-
-  editor.edit(editorBuilder => {
-    editorBuilder.replace(selection, res);
-    vscode.window.showInformationMessage("Generate JSON Succeed!");
-  });
+  vscode.env.clipboard.writeText(res);
+  vscode.window.showInformationMessage("Generate JSON Succeed!");
 }
 
 function b64encode() {
