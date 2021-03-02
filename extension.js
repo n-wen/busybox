@@ -40,6 +40,21 @@ function activate(context) {
 		busybox.b64decode();
 	})
 	context.subscriptions.push(base64decode);
+
+	let currentTimestamp = vscode.commands.registerCommand('busybox.currentTimestamp', function () {
+		busybox.currentTimestamp();
+	})
+	context.subscriptions.push(currentTimestamp);
+
+	let formatTimestamp = vscode.commands.registerCommand('busybox.formatTimestamp', function () {
+		busybox.formatTimestamp();
+	})
+	context.subscriptions.push(formatTimestamp);
+
+	let parseTimestamp = vscode.commands.registerCommand('busybox.parseTimestamp', function () {
+		busybox.parseTimestamp();
+	})
+	context.subscriptions.push(parseTimestamp);
 }
 exports.activate = activate;
 

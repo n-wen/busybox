@@ -18,7 +18,10 @@
 		"onCommand:busybox.json2go",
 		"onCommand:busybox.genjson",
 		"onCommand:busybox.b64encode",
-		"onCommand:busybox.b64decode"
+		"onCommand:busybox.b64decode",
+		"onCommand:busybox.currentTimestamp",
+		"onCommand:busybox.formatTimestamp",
+		"onCommand:busybox.parseTimestamp"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -38,6 +41,18 @@
 			{
 				"command": "busybox.b64decode",
 				"title": "busybox: Base64 Decode Selected Text"
+			},
+			{
+				"command": "busybox.currentTimestamp",
+				"title": "busybox: Get Current Timestamp"
+			},
+			{
+				"command": "busybox.formatTimestamp",
+				"title": "busybox: Format Timestamp"
+			},
+			{
+				"command": "busybox.parseTimestamp",
+				"title": "busybox: Parse Timestamp"
 			}
 		]
 	},

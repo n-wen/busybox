@@ -69,9 +69,59 @@ function b64decode() {
   });
 }
 
+// generate current timestamp
+function currentTimestamp() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  const currentDate = new Date();
+  const timestamp = currentDate.getTime();
+  editor.edit(editorBuilder => {
+    editorBuilder.insert(editor.selection.active, `${parseInt(timestamp / 1000)}`);
+    vscode.window.showInformationMessage("Get Current Timestamp Succeed!");
+  });
+}
+
+// parse timestamp from datetime string
+function parseTimestamp() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  var ts = new Date(text);
+  editor.edit(editorBuilder => {
+    editorBuilder.replace(selection, "" + parseInt(ts.getTime() / 1000));
+    vscode.window.showInformationMessage("Base64 Decode Succeed!");
+  });
+}
+
+// to datetime string , eg 2021-03-02 16:41:26
+function formatTimestamp() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  var ts = new Date(parseFloat(text) * 1000);
+  editor.edit(editorBuilder => {
+    editorBuilder.replace(selection, ts.toISOString());
+    vscode.window.showInformationMessage("Base64 Decode Succeed!");
+  });
+}
+
 module.exports = {
   convertjson,
   convertgosturct,
   b64encode,
-  b64decode
+  b64decode,
+  currentTimestamp,
+  parseTimestamp,
+  formatTimestamp,
 }

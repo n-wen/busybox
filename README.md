@@ -11,11 +11,11 @@ This project is to collect and bring them to VSCode.
 - Convert json to go struct
 - Generate json from go struct
 - Encode / Decode base64 text
+- Get Current Timestamp, format timestamp to ISOString, parse Datetime string to Timestamp
 
 ## TODO
 
-- Timestamp parsing and formating
-
+- 
 
 **Contributing**
 
