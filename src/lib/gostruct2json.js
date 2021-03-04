@@ -16,7 +16,7 @@ function gostruct2json(struct) {
         throw 'invalid struct'
       }
     } else {
-      tag = line.match(/json:"(.+)"/)
+      tag = line.match(/json:"(.+?)"/)
       if (tag == null || tag.length < 2) {
         continue
       }
@@ -36,7 +36,7 @@ function gostruct2json(struct) {
         if (tagValue == undefined) {
           tagValue = null
         }
-        for(var j = 0; j < arrayCount; j ++ ) {
+        for (var j = 0; j < arrayCount; j++) {
           tagValue = wrapArray(tagValue)
         }
       }
