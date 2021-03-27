@@ -116,6 +116,34 @@ function formatTimestamp() {
   });
 }
 
+function urlencode() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    editorBuilder.replace(selection, encodeURIComponent(text));
+    vscode.window.showInformationMessage("URLEecode Succeed!");
+  });
+}
+
+function urldecode() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    editorBuilder.replace(selection, decodeURIComponent(text));
+    vscode.window.showInformationMessage("URLEecode Succeed!");
+  });
+}
+
 module.exports = {
   convertjson,
   convertgosturct,
@@ -124,4 +152,6 @@ module.exports = {
   currentTimestamp,
   parseTimestamp,
   formatTimestamp,
+  urlencode,
+  urldecode,
 }

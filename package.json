@@ -19,6 +19,8 @@
 		"onCommand:busybox.genjson",
 		"onCommand:busybox.b64encode",
 		"onCommand:busybox.b64decode",
+		"onCommand:busybox.urlencode",
+		"onCommand:busybox.urldecode",
 		"onCommand:busybox.currentTimestamp",
 		"onCommand:busybox.formatTimestamp",
 		"onCommand:busybox.parseTimestamp"
@@ -41,6 +43,14 @@
 			{
 				"command": "busybox.b64decode",
 				"title": "busybox: Base64 Decode Selected Text"
+			},
+			{
+				"command": "busybox.urlencode",
+				"title": "busybox: URLEncode Selected Text"
+			},
+			{
+				"command": "busybox.urldecode",
+				"title": "busybox: URLDecode Selected Text"
 			},
 			{
 				"command": "busybox.currentTimestamp",

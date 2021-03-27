@@ -16,6 +16,7 @@ This project is to collect and bring them to VSCode.
 ## TODO
 
 - http request client
+- url encode/decode
 
 **Contributing**
 

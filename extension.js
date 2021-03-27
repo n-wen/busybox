@@ -55,6 +55,17 @@ function activate(context) {
 		busybox.parseTimestamp();
 	})
 	context.subscriptions.push(parseTimestamp);
+
+	let urlencode = vscode.commands.registerCommand("busybox.urlencode", function () {
+		busybox.urlencode();
+	})
+	context.subscriptions.push(urlencode);
+
+	let urldecode = vscode.commands.registerCommand("busybox.urldecode", function () {
+		busybox.urldecode();
+	})
+	context.subscriptions.push(urldecode);
+
 }
 exports.activate = activate;
 
