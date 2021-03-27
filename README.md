@@ -12,7 +12,7 @@ This project is to collect and bring them to VSCode.
 - Generate json from go struct
 - Encode / Decode base64 text
 - Get Current Timestamp, format timestamp to ISOString, parse Datetime string to Timestamp
-- url ncode/decode
+- url encode/decode
 
 ## TODO
 
