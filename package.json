@@ -9,21 +9,10 @@
 	"version": "0.6.2",
 	"icon": "busybox.png",
 	"engines": {
-		"vscode": "^1.51.0"
+		"vscode": "^1.75.0"
 	},
 	"categories": [
 		"Other"
-	],
-	"activationEvents": [
-		"onCommand:busybox.json2go",
-		"onCommand:busybox.genjson",
-		"onCommand:busybox.b64encode",
-		"onCommand:busybox.b64decode",
-		"onCommand:busybox.urlencode",
-		"onCommand:busybox.urldecode",
-		"onCommand:busybox.currentTimestamp",
-		"onCommand:busybox.formatTimestamp",
-		"onCommand:busybox.parseTimestamp"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -63,6 +52,18 @@
 			{
 				"command": "busybox.parseTimestamp",
 				"title": "busybox: Parse Timestamp"
+			},
+			{
+				"command": "busybox.centereditor",
+				"title": "busybox: Center Editor Window"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "busybox.centereditor",
+				"key": "ctrl+l",
+				"mac": "ctrl+l",
+				"when": "editorTextFocus || findWidgetVisible"
 			}
 		]
 	},

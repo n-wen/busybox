@@ -66,6 +66,46 @@ function activate(context) {
 	})
 	context.subscriptions.push(urldecode);
 
+	// center editor
+	let centereditorState = "center";
+	let timeout
+	function reset() {
+		if (timeout) clearTimeout(timeout);
+
+		timeout = setTimeout(() => {
+			state = "center";
+		}, 1000);
+	}
+
+	// center editor
+	vscode.window.onDidChangeActiveTextEditor(() => {
+		clearTimeout(timeout);
+		centereditorState = "center";
+	});
+	let centereditor = vscode.commands.registerCommand(
+		"busybox.centereditor",
+		() => {
+			switch (centereditorState) {
+				case "center":
+					busybox.toCenter();
+					centereditorState = "top";
+					reset();
+					break;
+				case "top":
+					busybox.toTop();
+					centereditorState = "bottom";
+					reset();
+					break;
+				case "bottom":
+					busybox.toBottom();
+					centereditorState = "center";
+					reset();
+					break;
+			}
+		}
+	);
+	context.subscriptions.push(centereditor);
+
 }
 exports.activate = activate;
 

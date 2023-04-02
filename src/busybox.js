@@ -144,6 +144,31 @@ function urldecode() {
   });
 }
 
+
+async function toCenter() {
+  let currentLineNumber = vscode.window.activeTextEditor.selection.start.line;
+  ;
+  await vscode.commands.executeCommand("revealLine", {
+    lineNumber: currentLineNumber,
+    at: "center"
+  });
+}
+
+async function toTop() {
+  let currentLineNumber = vscode.window.activeTextEditor.selection.start.line;
+  await vscode.commands.executeCommand("revealLine", {
+    lineNumber: currentLineNumber,
+    at: "top"
+  });
+}
+
+async function toBottom() {
+  let currentLineNumber = vscode.window.activeTextEditor.selection.start.line;
+  await vscode.commands.executeCommand("revealLine", {
+    lineNumber: currentLineNumber,
+    at: "bottom"
+  });
+}
 module.exports = {
   convertjson,
   convertgosturct,
@@ -154,4 +179,7 @@ module.exports = {
   formatTimestamp,
   urlencode,
   urldecode,
+  toTop,
+  toBottom,
+  toCenter,
 }

@@ -13,6 +13,7 @@ This project is to collect and bring them to VSCode.
 - Encode / Decode base64 text
 - Get Current Timestamp, format timestamp to ISOString, parse Datetime string to Timestamp
 - url encode/decode
+- center editor window like emacs use `ctrl+L`
 
 ## TODO
 
