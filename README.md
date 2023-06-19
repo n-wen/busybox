@@ -7,9 +7,20 @@ I think there is no need to open too many tabs of JSON online toolkits.
 This project is to collect and bring them to VSCode.
 
 ## Features
+type `ctrl+p` (or `cmd+p` in macos) to open command pallate,
+input `busybox` to show all related command.
+
+![](./asset/busybox.png)
+
 
 - Convert json to go struct
-- Generate json from go struct
+
+![](./asset/jsontogo.gif)
+
+- Generate json from go struct, put result to clipboard.
+
+![](./asset/gotojson.gif)
+
 - Encode / Decode base64 text
 - Get Current Timestamp, format timestamp to ISOString, parse Datetime string to Timestamp
 - url encode/decode
