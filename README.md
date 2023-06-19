@@ -14,6 +14,7 @@ This project is to collect and bring them to VSCode.
 - Get Current Timestamp, format timestamp to ISOString, parse Datetime string to Timestamp
 - url encode/decode
 - center editor window like emacs use `ctrl+L`
+- Conversion for json and excel
 
 ## TODO
 
@@ -25,7 +26,7 @@ Contributions are welcome. To test and run this extension, please refer to [vsco
 
 Feel free to submit issues or feature requests on [github](https://github.com/n-wen/busybox).
 
-**License**
+## **License**
 
 Licensed under the MIT license.
 
