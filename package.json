@@ -90,5 +90,8 @@
 		"mocha": "^8.1.3",
 		"typescript": "^4.0.2",
 		"vscode-test": "^1.4.0"
+	},
+	"vsce": {
+		"baseImagesUrl": "https://github.com/n-wen/busybox/raw/master"
 	}
 }
