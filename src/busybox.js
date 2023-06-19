@@ -1,5 +1,6 @@
 const json2go = require("./lib/json2go")
 const gostruct2json = require("./lib/gostruct2json")
+const excel = require("./lib/excel")
 const vscode = require("vscode")
 
 function convertjson() {
@@ -144,6 +145,44 @@ function urldecode() {
   });
 }
 
+function exceltojson() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    let { success, content } = excel.exceltojson(0, text)
+    if (success) {
+      editorBuilder.replace(selection, content);
+      vscode.window.showInformationMessage("Excel Convert Succeed!");
+    } else {
+      vscode.window.showErrorMessage("Excel Convert Fail!");
+    }
+  });
+}
+
+function jsontoexcel() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    let { success, content } = excel.jsontoexcel(text)
+    if (success) {
+      editorBuilder.replace(selection, content);
+      vscode.window.showInformationMessage("Json Convert Excel Succeed!");
+    } else {
+      vscode.window.showErrorMessage("Json Convert Excel Fail!");
+    }
+  });
+}
+
 
 async function toCenter() {
   let currentLineNumber = vscode.window.activeTextEditor.selection.start.line;
@@ -169,6 +208,7 @@ async function toBottom() {
     at: "bottom"
   });
 }
+
 module.exports = {
   convertjson,
   convertgosturct,
@@ -182,4 +222,6 @@ module.exports = {
   toTop,
   toBottom,
   toCenter,
+  exceltojson,
+  jsontoexcel,
 }

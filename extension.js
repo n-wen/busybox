@@ -106,6 +106,16 @@ function activate(context) {
 	);
 	context.subscriptions.push(centereditor);
 
+	// excel and json convertion
+	let exceltojson = vscode.commands.registerCommand('busybox.exceltojson', function () {
+		busybox.exceltojson();
+	})
+	context.subscriptions.push(exceltojson)
+
+	let jsontoexcel = vscode.commands.registerCommand('busybox.jsontoexcel', function () {
+		busybox.jsontoexcel();
+	})
+	context.subscriptions.push(jsontoexcel)
 }
 exports.activate = activate;
 
