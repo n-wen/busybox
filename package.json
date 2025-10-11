@@ -16,6 +16,16 @@
 	],
 	"main": "./extension.js",
 	"contributes": {
+		"configuration": {
+			"title": "Busybox",
+			"properties": {
+				"busybox.idea.cmd.path": {
+					"type": "string",
+					"default": "idea64",
+					"description": "IntelliJ IDEA 命令路径，默认为 idea64。可以设置为完整路径，如：C:\\Program Files\\JetBrains\\IntelliJ IDEA\\bin\\idea64.exe"
+				}
+			}
+		},
 		"commands": [
 			{
 				"command": "busybox.json2go",

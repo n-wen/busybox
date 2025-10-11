@@ -4,7 +4,7 @@
 
 I think there is no need to open too many tabs of JSON online toolkits. 
 
-This project is to collect and bring them to VSCode.
+This project aims to collect these tools and bring them to VSCode (now with others, like cursor, trace, etc.).
 
 ## Features
 type `ctrl+p` (or `cmd+p` in macos) to open command pallate,
@@ -26,6 +26,13 @@ input `busybox` to show all related command.
 - url encode/decode
 - center editor window like emacs use `ctrl+L`
 - Conversion for json and excel
+- Open file in your idea
+If idea64.exe not in your path, consider add following configuration:
+```json
+{
+  "busybox.idea.cmd.path": "idea"
+}
+```
 
 ## TODO
 

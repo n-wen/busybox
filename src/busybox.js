@@ -213,9 +213,16 @@ async function toBottom() {
 async function openInIdea() {
   // get current file path
   let currentFilePath = vscode.window.activeTextEditor.document.uri.fsPath;
+  
+  // 读取配置的命令路径，如果没有配置则使用默认的 idea64
+  const config = vscode.workspace.getConfiguration('busybox');
+  const ideaCmd = config.get('idea.cmd.path', 'idea64');
+  
   // 使用 child_process 直接执行命令，无需显示终端
   const quotedPath = `"${currentFilePath}"`;
-  exec(`idea64 ${quotedPath}`, (error) => {
+  const quotedCmd = ideaCmd.includes(' ') ? `"${ideaCmd}"` : ideaCmd;
+  
+  exec(`${quotedCmd} ${quotedPath}`, (error) => {
     if (error) {
       vscode.window.showErrorMessage(`打开 IntelliJ IDEA 失败: ${error.message}`);
     } else {
