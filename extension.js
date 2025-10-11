@@ -116,6 +116,12 @@ function activate(context) {
 		busybox.jsontoexcel();
 	})
 	context.subscriptions.push(jsontoexcel)
+
+	// open in idea
+	let openInIdea = vscode.commands.registerCommand('busybox.openInIdea', function () {
+		busybox.openInIdea();
+	})
+	context.subscriptions.push(openInIdea)
 }
 exports.activate = activate;
 

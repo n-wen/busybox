@@ -2,6 +2,7 @@ const json2go = require("./lib/json2go")
 const gostruct2json = require("./lib/gostruct2json")
 const excel = require("./lib/excel")
 const vscode = require("vscode")
+const { exec } = require("child_process")
 
 function convertjson() {
   var editor = vscode.window.activeTextEditor;
@@ -209,6 +210,20 @@ async function toBottom() {
   });
 }
 
+async function openInIdea() {
+  // get current file path
+  let currentFilePath = vscode.window.activeTextEditor.document.uri.fsPath;
+  // 使用 child_process 直接执行命令，无需显示终端
+  const quotedPath = `"${currentFilePath}"`;
+  exec(`idea64 ${quotedPath}`, (error) => {
+    if (error) {
+      vscode.window.showErrorMessage(`打开 IntelliJ IDEA 失败: ${error.message}`);
+    } else {
+      vscode.window.showInformationMessage('已在 IntelliJ IDEA 中打开文件');
+    }
+  });
+}
+
 module.exports = {
   convertjson,
   convertgosturct,
@@ -224,4 +239,5 @@ module.exports = {
   toCenter,
   exceltojson,
   jsontoexcel,
+  openInIdea,
 }

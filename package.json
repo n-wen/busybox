@@ -64,8 +64,21 @@
 			{
 				"command": "busybox.jsontoexcel",
 				"title": "busybox: Convert json to excel"
+			},
+			{
+				"command": "busybox.openInIdea",
+				"title": "busybox: Open in Idea"
 			}
 		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "busybox.openInIdea",
+					"group": "navigation@1",
+					"when": "editorFocus"
+				}
+			]
+		},
 		"keybindings": [
 			{
 				"command": "busybox.centereditor",
