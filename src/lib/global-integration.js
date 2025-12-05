@@ -43,15 +43,36 @@ class GlobalIntegration {
     }
 
     /**
+     * 获取 Maven 源码目录路径
+     * @returns {string} Maven 源码路径
+     */
+    getMavenSourcesPath() {
+        const os = require('os');
+        const path = require('path');
+        return path.join(os.homedir(), '.m2', 'sources');
+    }
+
+    /**
      * 获取包含 GTAGSDBPATH 的环境变量
      * @returns {Object} 环境变量对象
      */
     getEnvWithDbPath() {
-        return {
+        const path = require('path');
+        const fs = require('fs');
+        const mavenSourcesPath = this.getMavenSourcesPath();
+        
+        const env = {
             ...process.env,
             GTAGSDBPATH: this.getDbPath(),
             GTAGSROOT: this.getWorkspaceRoot()
         };
+
+        // 如果 Maven 源码目录存在且有 GTAGS，添加到 GTAGSLIBPATH
+        if (fs.existsSync(path.join(mavenSourcesPath, 'GTAGS'))) {
+            env.GTAGSLIBPATH = mavenSourcesPath;
+        }
+
+        return env;
     }
 
     /**
@@ -106,10 +127,11 @@ class GlobalIntegration {
 
     /**
      * 查找文档符号
+     * @param {string} filePath - 文件路径
      * @returns {Promise<Array>} 查找结果
      */
-    async findDocumentSymbols() {
-        const output = await this.runCommand(['--encode-path', '" "', '-x']);
+    async findDocumentSymbols(filePath) {
+        const output = await this.runCommand(['--encode-path', '" "', '-xaf', filePath]);
         return this.parseOutput(output);
     }
 
@@ -400,7 +422,7 @@ class ReusableDocumentSymbolProvider {
      */
     async provideDocumentSymbols(document, token) {
         try {
-            const results = await this.global.findDocumentSymbols();
+            const results = await this.global.findDocumentSymbols(document.fileName);
 
             return results.map(result =>
                 new vscode.DocumentSymbol(

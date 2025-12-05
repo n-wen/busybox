@@ -57,6 +57,24 @@
 | `busybox: Find Symbol Definition (GNU Global)` | 查找符号定义 |
 | `busybox: Find Symbol References (GNU Global)` | 查找符号引用 |
 
+### Maven 源码导航
+
+支持跳转到 Maven 依赖的源码（例如 Spring Framework 源码）。
+
+#### 设置步骤
+
+1. 运行 `busybox: Download Maven Dependency Sources` 下载源码
+2. 运行 `busybox: Extract Maven Sources to ~/.m2/sources` 解压 jar 文件
+3. 运行 `busybox: Rebuild Library Gtags Database` 构建 gtags 索引
+
+设置完成后，即可跳转到 Maven 依赖库的源码定义！
+
+| 命令 | 描述 |
+|------|------|
+| `busybox: Download Maven Dependency Sources` | 运行 `mvn dependency:sources` |
+| `busybox: Extract Maven Sources to ~/.m2/sources` | 解压所有 *-sources.jar |
+| `busybox: Rebuild Library Gtags Database` | 为 ~/.m2/sources 构建 gtags |
+
 ---
 
 ## 其他功能

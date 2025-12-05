@@ -102,6 +102,18 @@
             {
                 "command": "busybox.findGlobalReferences",
                 "title": "busybox: Find Symbol References (GNU Global)"
+            },
+            {
+                "command": "busybox.downloadMavenSources",
+                "title": "busybox: Download Maven Dependency Sources"
+            },
+            {
+                "command": "busybox.extractMavenSources",
+                "title": "busybox: Extract Maven Sources to ~/.m2/sources"
+            },
+            {
+                "command": "busybox.rebuildLibraryTags",
+                "title": "busybox: Rebuild Library Gtags Database"
             }
         ],
         "menus": {

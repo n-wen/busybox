@@ -58,6 +58,24 @@ Add the following configuration in VSCode settings to enable jumping to referenc
 | `busybox: Find Symbol Definition (GNU Global)` | Find symbol definition |
 | `busybox: Find Symbol References (GNU Global)` | Find symbol references |
 
+### Maven Source Navigation
+
+Support jumping to Maven dependency sources (e.g., Spring Framework source code).
+
+#### Setup Steps
+
+1. Run `busybox: Download Maven Dependency Sources` to download sources
+2. Run `busybox: Extract Maven Sources to ~/.m2/sources` to extract jar files
+3. Run `busybox: Rebuild Library Gtags Database` to build gtags index
+
+After setup, you can jump to definitions in Maven dependencies!
+
+| Command | Description |
+|---------|-------------|
+| `busybox: Download Maven Dependency Sources` | Run `mvn dependency:sources` |
+| `busybox: Extract Maven Sources to ~/.m2/sources` | Extract all *-sources.jar |
+| `busybox: Rebuild Library Gtags Database` | Build gtags for ~/.m2/sources |
+
 ---
 
 ## Other Features

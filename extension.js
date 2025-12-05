@@ -131,6 +131,10 @@ function activate(context) {
 	context.subscriptions.push(vscode.commands.registerCommand('busybox.findGlobalDefinition', busybox.findGlobalDefinition));
 	context.subscriptions.push(vscode.commands.registerCommand('busybox.findGlobalReferences', busybox.findGlobalReferences));
 
+	// maven sources
+	context.subscriptions.push(vscode.commands.registerCommand('busybox.downloadMavenSources', busybox.downloadMavenSources));
+	context.subscriptions.push(vscode.commands.registerCommand('busybox.extractMavenSources', busybox.extractMavenSources));
+	context.subscriptions.push(vscode.commands.registerCommand('busybox.rebuildLibraryTags', busybox.rebuildLibraryTags));
 }
 exports.activate = activate;
 

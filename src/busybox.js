@@ -405,6 +405,147 @@ async function findGlobalReferences() {
   }
 }
 
+// ========== Maven 源码相关功能 ==========
+
+/**
+ * 获取 Maven 源码目录路径
+ * @returns {string}
+ */
+function getMavenSourcesPath() {
+  const os = require('os');
+  const path = require('path');
+  return path.join(os.homedir(), '.m2', 'sources');
+}
+
+/**
+ * 获取 Maven 仓库路径
+ * @returns {string}
+ */
+function getMavenRepoPath() {
+  const os = require('os');
+  const path = require('path');
+  return path.join(os.homedir(), '.m2', 'repository');
+}
+
+/**
+ * 下载 Maven 依赖源码
+ */
+async function downloadMavenSources() {
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  if (!workspaceRoot) {
+    vscode.window.showErrorMessage('No workspace folder found');
+    return;
+  }
+
+  // 检查是否是 Maven 项目
+  const fs = require('fs');
+  const path = require('path');
+  const pomPath = path.join(workspaceRoot, 'pom.xml');
+  if (!fs.existsSync(pomPath)) {
+    vscode.window.showErrorMessage('No pom.xml found in workspace root. This is not a Maven project.');
+    return;
+  }
+
+  vscode.window.withProgress({
+    location: vscode.ProgressLocation.Notification,
+    title: 'Downloading Maven sources...',
+    cancellable: false
+  }, async () => {
+    return new Promise((resolve, reject) => {
+      exec('mvn dependency:sources', { cwd: workspaceRoot, maxBuffer: 50 * 1024 * 1024 }, (error, stdout, stderr) => {
+        if (error) {
+          vscode.window.showErrorMessage(`Failed to download Maven sources: ${error.message}`);
+          reject(error);
+        } else {
+          vscode.window.showInformationMessage('Maven sources downloaded successfully!');
+          resolve();
+        }
+      });
+    });
+  });
+}
+
+/**
+ * 解压 Maven 源码到 ~/.m2/sources
+ */
+async function extractMavenSources() {
+  const fs = require('fs');
+  const path = require('path');
+  const { promisify } = require('util');
+  const execPromise = promisify(exec);
+
+  const sourcesPath = getMavenSourcesPath();
+  const repoPath = getMavenRepoPath();
+
+  // 检查 Maven 仓库是否存在
+  if (!fs.existsSync(repoPath)) {
+    vscode.window.showErrorMessage(`Maven repository not found at ${repoPath}`);
+    return;
+  }
+
+  // 创建源码目录
+  if (!fs.existsSync(sourcesPath)) {
+    fs.mkdirSync(sourcesPath, { recursive: true });
+  }
+
+  vscode.window.withProgress({
+    location: vscode.ProgressLocation.Notification,
+    title: 'Extracting Maven sources...',
+    cancellable: false
+  }, async () => {
+    try {
+      // 根据操作系统选择命令
+      const isWindows = process.platform === 'win32';
+      let command;
+      
+      if (isWindows) {
+        // Windows: 使用 PowerShell
+        command = `powershell -Command "Get-ChildItem -Path '${repoPath}' -Recurse -Filter '*-sources.jar' | ForEach-Object { Expand-Archive -Path $_.FullName -DestinationPath '${sourcesPath}' -Force }"`;
+      } else {
+        // Unix/Mac: 使用 find 和 unzip
+        command = `find "${repoPath}" -name "*-sources.jar" -exec unzip -o -d "${sourcesPath}" {} \\;`;
+      }
+
+      await execPromise(command, { maxBuffer: 100 * 1024 * 1024 });
+      vscode.window.showInformationMessage(`Maven sources extracted to ${sourcesPath}`);
+    } catch (error) {
+      vscode.window.showErrorMessage(`Failed to extract Maven sources: ${error.message}`);
+    }
+  });
+}
+
+/**
+ * 刷新外部库的 gtags 数据库
+ */
+async function rebuildLibraryTags() {
+  const fs = require('fs');
+  const sourcesPath = getMavenSourcesPath();
+
+  // 检查源码目录是否存在
+  if (!fs.existsSync(sourcesPath)) {
+    vscode.window.showErrorMessage(`Maven sources directory not found at ${sourcesPath}. Please extract sources first.`);
+    return;
+  }
+
+  vscode.window.withProgress({
+    location: vscode.ProgressLocation.Notification,
+    title: 'Building library gtags database...',
+    cancellable: false
+  }, async () => {
+    return new Promise((resolve, reject) => {
+      exec('gtags', { cwd: sourcesPath, maxBuffer: 100 * 1024 * 1024 }, (error, stdout, stderr) => {
+        if (error) {
+          vscode.window.showErrorMessage(`Failed to build library gtags: ${error.message}`);
+          reject(error);
+        } else {
+          vscode.window.showInformationMessage('Library gtags database built successfully!');
+          resolve();
+        }
+      });
+    });
+  });
+}
+
 module.exports = {
   convertjson,
   convertgosturct,
@@ -427,4 +568,8 @@ module.exports = {
   createGlobalDatabase,
   findGlobalDefinition,
   findGlobalReferences,
+  // Maven sources
+  downloadMavenSources,
+  extractMavenSources,
+  rebuildLibraryTags,
 }
