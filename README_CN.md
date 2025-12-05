@@ -61,7 +61,9 @@
 
 支持跳转到 Maven 依赖的源码（例如 Spring Framework 源码）。
 
-#### 设置步骤
+📖 **[详细文档](./docs/maven-sources_CN.md)** - 工作原理和手动设置脚本
+
+#### 快速设置
 
 1. 运行 `busybox: Download Maven Dependency Sources` 下载源码
 2. 运行 `busybox: Extract Maven Sources to ~/.m2/sources` 解压 jar 文件

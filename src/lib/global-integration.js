@@ -78,9 +78,11 @@ class GlobalIntegration {
     /**
      * 执行GNU Global命令
      * @param {string[]} params - 命令参数
+     * @param {string} [cwd] - 工作目录（可选）
+     * @param {Object} [env] - 环境变量（可选）
      * @returns {Promise<string>} 命令输出
      */
-    async runCommand(params) {
+    async runCommand(params, cwd = null, env = null) {
         const configuration = vscode.workspace.getConfiguration('codegnuglobal');
         const encoding = configuration.get('encoding');
 
@@ -88,10 +90,10 @@ class GlobalIntegration {
 
         try {
             const result = await childProcess.exec(command, {
-                cwd: this.getWorkspaceRoot(),
+                cwd: cwd || this.getWorkspaceRoot(),
                 encoding: encoding ? 'binary' : 'utf8',
                 maxBuffer: 10 * 1024 * 1024,
-                env: this.getEnvWithDbPath()
+                env: env || this.getEnvWithDbPath()
             });
 
             // 如果需要编码转换
@@ -103,6 +105,41 @@ class GlobalIntegration {
             console.error('Global command failed:', error);
             throw error;
         }
+    }
+
+    /**
+     * 检测文件是否在 Maven 源码目录下
+     * @param {string} filePath - 文件路径
+     * @returns {boolean}
+     */
+    isInMavenSources(filePath) {
+        const mavenSourcesPath = this.getMavenSourcesPath();
+        const normalizedFile = filePath.replace(/\\/g, '/').toLowerCase();
+        const normalizedMaven = mavenSourcesPath.replace(/\\/g, '/').toLowerCase();
+        return normalizedFile.startsWith(normalizedMaven);
+    }
+
+    /**
+     * 获取文件所属的项目根目录和环境变量
+     * @param {string} filePath - 文件路径
+     * @returns {{cwd: string, env: Object}}
+     */
+    getProjectContext(filePath) {
+        if (this.isInMavenSources(filePath)) {
+            const mavenSourcesPath = this.getMavenSourcesPath();
+            return {
+                cwd: mavenSourcesPath,
+                env: {
+                    ...process.env,
+                    GTAGSDBPATH: mavenSourcesPath,
+                    GTAGSROOT: mavenSourcesPath
+                }
+            };
+        }
+        return {
+            cwd: this.getWorkspaceRoot(),
+            env: this.getEnvWithDbPath()
+        };
     }
 
     /**
@@ -131,7 +168,8 @@ class GlobalIntegration {
      * @returns {Promise<Array>} 查找结果
      */
     async findDocumentSymbols(filePath) {
-        const output = await this.runCommand(['--encode-path', '" "', '-xaf', filePath]);
+        const context = this.getProjectContext(filePath);
+        const output = await this.runCommand(['--encode-path', '" "', '-xaf', filePath], context.cwd, context.env);
         return this.parseOutput(output);
     }
 
@@ -322,6 +360,56 @@ class ReusableDefinitionProvider {
     }
 
     /**
+     * 从 import 语句中提取全限定类名的路径模式
+     * @param {string} line - 当前行文本
+     * @param {string} word - 当前符号
+     * @returns {string|null} 路径模式（如 com/google/common/collect/Lists）或 null
+     */
+    extractImportPathPattern(line, word) {
+        // 匹配 Java import: import com.google.common.collect.Lists;
+        const javaImportMatch = line.match(/^\s*import\s+(static\s+)?([a-zA-Z0-9_.]+);?\s*$/);
+        if (javaImportMatch) {
+            const fullPath = javaImportMatch[2];
+            // 确保 import 的最后部分是我们要找的符号
+            if (fullPath.endsWith('.' + word) || fullPath === word) {
+                // 转换为路径模式：com.google.common.collect.Lists -> com/google/common/collect/Lists
+                return fullPath.replace(/\./g, '/');
+            }
+        }
+
+        // 匹配 C/C++ include: #include <google/protobuf/message.h>
+        const cIncludeMatch = line.match(/^\s*#\s*include\s*[<"]([^>"]+)[>"]/);
+        if (cIncludeMatch) {
+            const includePath = cIncludeMatch[1];
+            // 返回 include 路径（去掉扩展名）
+            return includePath.replace(/\.[^.]+$/, '');
+        }
+
+        return null;
+    }
+
+    /**
+     * 根据路径模式过滤结果
+     * @param {Array} results - 查找结果
+     * @param {string} pathPattern - 路径模式
+     * @returns {Array} 过滤后的结果
+     */
+    filterByPathPattern(results, pathPattern) {
+        if (!pathPattern) return results;
+
+        // 标准化路径分隔符
+        const normalizedPattern = pathPattern.replace(/\\/g, '/');
+        
+        const filtered = results.filter(result => {
+            const normalizedPath = result.path.replace(/\\/g, '/');
+            return normalizedPath.includes(normalizedPattern);
+        });
+
+        // 如果过滤后有结果，返回过滤后的；否则返回原始结果
+        return filtered.length > 0 ? filtered : results;
+    }
+
+    /**
      * 提供定义查找功能
      * @param {vscode.TextDocument} document - 文档对象
      * @param {vscode.Position} position - 位置
@@ -336,9 +424,16 @@ class ReusableDefinitionProvider {
         if (!word) return null;
 
         try {
-            const results = await this.global.findDefinition(word);
+            let results = await this.global.findDefinition(word);
 
             if (results.length === 0) return null;
+
+            // 如果有多个结果，尝试根据 import/include 语句过滤
+            if (results.length > 1) {
+                const currentLine = document.lineAt(position.line).text;
+                const pathPattern = this.extractImportPathPattern(currentLine, word);
+                results = this.filterByPathPattern(results, pathPattern);
+            }
 
             // 返回带精确范围的 Location
             return results.map(result => new vscode.Location(

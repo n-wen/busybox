@@ -62,7 +62,9 @@ Add the following configuration in VSCode settings to enable jumping to referenc
 
 Support jumping to Maven dependency sources (e.g., Spring Framework source code).
 
-#### Setup Steps
+📖 **[Detailed Documentation](./docs/maven-sources.md)** - How it works & manual setup scripts
+
+#### Quick Setup
 
 1. Run `busybox: Download Maven Dependency Sources` to download sources
 2. Run `busybox: Extract Maven Sources to ~/.m2/sources` to extract jar files
