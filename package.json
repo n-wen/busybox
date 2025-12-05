@@ -25,7 +25,12 @@
                 "busybox.idea.cmd.path": {
                     "type": "string",
                     "default": "idea64",
-                    "description": "IntelliJ IDEA 命令路径，默认为 idea64。可以设置为完整路径，如：C:\\Program Files\\JetBrains\\IntelliJ IDEA\\bin\\idea64.exe"
+                    "description": "IntelliJ IDEA command path. Default is idea64. Can be set to full path like: C:\\Program Files\\JetBrains\\IntelliJ IDEA\\bin\\idea64.exe"
+                },
+                "busybox.gnuGlobal.enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable GNU Global (gtags) integration for code navigation. Requires GNU Global to be installed."
                 }
             }
         },

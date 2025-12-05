@@ -27,15 +27,23 @@
 ### 使用方法
 
 1. 确保已安装 [GNU Global](https://www.gnu.org/software/global/)
-2. 运行命令 `busybox: Create GNU Global Database` 创建数据库（存储在 `.vscode` 目录）
-3. 使用 `F12` 跳转定义，`Shift+F12` 查找引用
+2. **启用功能**，在 VSCode 设置中添加：
+   ```json
+   {
+     "busybox.gnuGlobal.enabled": true
+   }
+   ```
+3. **重新加载 VSCode** 以激活功能
+4. 运行命令 `busybox: Create GNU Global Database` 创建数据库（存储在 `.vscode` 目录）
+5. 使用 `F12` 跳转定义，`Shift+F12` 查找引用
 
 ### 推荐配置
 
-在 VSCode 设置中添加以下配置，实现在定义处 `Ctrl+Click` 跳转到引用：
+在 VSCode 设置中添加以下配置，启用功能并实现在定义处 `Ctrl+Click` 跳转到引用：
 
 ```json
 {
+  "busybox.gnuGlobal.enabled": true,
   "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
 }
 ```

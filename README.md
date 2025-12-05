@@ -28,8 +28,15 @@ Integrated [GNU Global](https://www.gnu.org/software/global/) code navigation fo
 ### Usage
 
 1. Install [GNU Global](https://www.gnu.org/software/global/)
-2. Run command `busybox: Create GNU Global Database` to create database (stored in `.vscode` directory)
-3. Use `F12` to go to definition, `Shift+F12` to find references
+2. **Enable the feature** in VSCode settings:
+   ```json
+   {
+     "busybox.gnuGlobal.enabled": true
+   }
+   ```
+3. **Reload VSCode** to activate the feature
+4. Run command `busybox: Create GNU Global Database` to create database (stored in `.vscode` directory)
+5. Use `F12` to go to definition, `Shift+F12` to find references
 
 ### Recommended Configuration
 
@@ -37,6 +44,7 @@ Add the following configuration in VSCode settings to enable jumping to referenc
 
 ```json
 {
+  "busybox.gnuGlobal.enabled": true,
   "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.goToReferences"
 }
 ```

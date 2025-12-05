@@ -238,10 +238,24 @@ async function openInIdea() {
 // ========== GNU Global 相关功能 ==========
 
 /**
+ * 检查 GNU Global 是否启用
+ * @returns {boolean}
+ */
+function isGnuGlobalEnabled() {
+  const config = vscode.workspace.getConfiguration('busybox');
+  return config.get('gnuGlobal.enabled', false);
+}
+
+/**
  * 注册 GNU Global Providers
  * @param {vscode.ExtensionContext} context
  */
 function registerGlobalProviders(context) {
+  // 检查是否启用
+  if (!isGnuGlobalEnabled()) {
+    return;
+  }
+
   // 注册定义提供者
   const definitionProvider = new ReusableDefinitionProvider(globalIntegration);
   context.subscriptions.push(vscode.languages.registerDefinitionProvider({ scheme: 'file' }, definitionProvider));
