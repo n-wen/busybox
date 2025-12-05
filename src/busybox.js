@@ -1,8 +1,12 @@
 const json2go = require("./lib/json2go")
 const gostruct2json = require("./lib/gostruct2json")
 const excel = require("./lib/excel")
+const { GlobalIntegration, ReusableDefinitionProvider, ReusableReferenceProvider, ReusableDocumentSymbolProvider } = require('./lib/global-integration')
 const vscode = require("vscode")
 const { exec } = require("child_process")
+
+// GNU Global 集成实例
+const globalIntegration = new GlobalIntegration()
 
 function convertjson() {
   var editor = vscode.window.activeTextEditor;
@@ -231,6 +235,162 @@ async function openInIdea() {
   });
 }
 
+// ========== GNU Global 相关功能 ==========
+
+/**
+ * 注册 GNU Global Providers
+ * @param {vscode.ExtensionContext} context
+ */
+function registerGlobalProviders(context) {
+  // 注册定义提供者
+  const definitionProvider = new ReusableDefinitionProvider(globalIntegration);
+  context.subscriptions.push(vscode.languages.registerDefinitionProvider({ scheme: 'file' }, definitionProvider));
+
+  // 注册引用提供者
+  const referenceProvider = new ReusableReferenceProvider(globalIntegration);
+  context.subscriptions.push(vscode.languages.registerReferenceProvider({ scheme: 'file' }, referenceProvider));
+
+  // 注册文档符号提供者
+  const documentSymbolProvider = new ReusableDocumentSymbolProvider(globalIntegration);
+  context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ scheme: 'file' }, documentSymbolProvider));
+}
+
+/**
+ * 更新 GNU Global 标签
+ */
+async function updateGlobalTags() {
+  try {
+    await globalIntegration.updateTags();
+    vscode.window.showInformationMessage('GNU Global tags updated successfully');
+  } catch (error) {
+    if (error && error.code === 3) {
+      const createDB = await vscode.window.showInformationMessage(
+        'GNU Global database not found. Would you like to create it now?',
+        'Create Database', 'Learn More'
+      );
+
+      if (createDB === 'Create Database') {
+        try {
+          await globalIntegration.createDatabase();
+          vscode.window.showInformationMessage('GNU Global database created successfully in .vscode directory!');
+        } catch (createError) {
+          vscode.window.showErrorMessage(`Failed to create GNU Global database: ${createError.message}`);
+        }
+      } else if (createDB === 'Learn More') {
+        vscode.env.openExternal(vscode.Uri.parse('https://www.gnu.org/software/global/globalhtml_toc.html'));
+      }
+    } else {
+      vscode.window.showErrorMessage('Failed to update GNU Global tags: ' + error.message);
+    }
+  }
+}
+
+/**
+ * 创建 GNU Global 数据库
+ */
+async function createGlobalDatabase() {
+  try {
+    await globalIntegration.createDatabase();
+    vscode.window.showInformationMessage('GNU Global database created successfully in .vscode directory!');
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to create GNU Global database: ${error.message}`);
+  }
+}
+
+/**
+ * 查找符号定义
+ */
+async function findGlobalDefinition() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) return;
+
+  const wordRange = editor.document.getWordRangeAtPosition(editor.selection.start);
+  if (!wordRange) return;
+
+  const word = editor.document.getText(wordRange);
+  if (!word) return;
+
+  try {
+    const results = await globalIntegration.findDefinition(word);
+    if (results.length === 0) {
+      vscode.window.showInformationMessage(`No definition found for symbol: ${word}`);
+      return;
+    }
+
+    // 如果只有一个结果，直接跳转
+    if (results.length === 1) {
+      const result = results[0];
+      const uri = vscode.Uri.file(result.path);
+      const position = new vscode.Position(result.line, 0);
+      await vscode.window.showTextDocument(uri, { selection: new vscode.Range(position, position) });
+    } else {
+      // 多个结果，显示快速选择
+      const items = results.map(result => ({
+        label: `${result.tag}`,
+        description: `${result.path}:${result.line + 1}`,
+        detail: result.info,
+        result: result
+      }));
+
+      const selected = await vscode.window.showQuickPick(items, {
+        placeHolder: `Multiple definitions found for ${word}, select one:`
+      });
+
+      if (selected) {
+        const result = selected.result;
+        const uri = vscode.Uri.file(result.path);
+        const position = new vscode.Position(result.line, 0);
+        await vscode.window.showTextDocument(uri, { selection: new vscode.Range(position, position) });
+      }
+    }
+  } catch (error) {
+    vscode.window.showErrorMessage('Failed to find definition: ' + error.message);
+  }
+}
+
+/**
+ * 查找符号引用
+ */
+async function findGlobalReferences() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) return;
+
+  const wordRange = editor.document.getWordRangeAtPosition(editor.selection.start);
+  if (!wordRange) return;
+
+  const word = editor.document.getText(wordRange);
+  if (!word) return;
+
+  try {
+    const results = await globalIntegration.findReferences(word);
+    if (results.length === 0) {
+      vscode.window.showInformationMessage(`No references found for symbol: ${word}`);
+      return;
+    }
+
+    // 显示快速选择
+    const items = results.map(result => ({
+      label: `${result.tag}`,
+      description: `${result.path}:${result.line + 1}`,
+      detail: result.info,
+      result: result
+    }));
+
+    const selected = await vscode.window.showQuickPick(items, {
+      placeHolder: `References for ${word}:`
+    });
+
+    if (selected) {
+      const result = selected.result;
+      const uri = vscode.Uri.file(result.path);
+      const position = new vscode.Position(result.line, 0);
+      await vscode.window.showTextDocument(uri, { selection: new vscode.Range(position, position) });
+    }
+  } catch (error) {
+    vscode.window.showErrorMessage('Failed to find references: ' + error.message);
+  }
+}
+
 module.exports = {
   convertjson,
   convertgosturct,
@@ -247,4 +407,10 @@ module.exports = {
   exceltojson,
   jsontoexcel,
   openInIdea,
+  // GNU Global
+  registerGlobalProviders,
+  updateGlobalTags,
+  createGlobalDatabase,
+  findGlobalDefinition,
+  findGlobalReferences,
 }

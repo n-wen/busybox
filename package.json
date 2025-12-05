@@ -1,120 +1,144 @@
 {
-	"name": "busybox",
-	"displayName": "busybox",
-	"publisher": "wenning",
-	"repository": {
-		"url": "https://github.com/n-wen/busybox"
-	},
-	"description": "toolkits(json2go, base64 encode, decode, timestamp, excel etc.)",
-	"version": "0.8.0",
-	"icon": "busybox.png",
-	"engines": {
-		"vscode": "^1.75.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"main": "./extension.js",
-	"contributes": {
-		"configuration": {
-			"title": "Busybox",
-			"properties": {
-				"busybox.idea.cmd.path": {
-					"type": "string",
-					"default": "idea64",
-					"description": "IntelliJ IDEA 命令路径，默认为 idea64。可以设置为完整路径，如：C:\\Program Files\\JetBrains\\IntelliJ IDEA\\bin\\idea64.exe"
-				}
-			}
-		},
-		"commands": [
-			{
-				"command": "busybox.json2go",
-				"title": "busybox: Convert Selected JSON to Go Struct"
-			},
-			{
-				"command": "busybox.genjson",
-				"title": "busybox: Generate JSON from Go Struct"
-			},
-			{
-				"command": "busybox.b64encode",
-				"title": "busybox: Base64 Encode Selected Text"
-			},
-			{
-				"command": "busybox.b64decode",
-				"title": "busybox: Base64 Decode Selected Text"
-			},
-			{
-				"command": "busybox.urlencode",
-				"title": "busybox: URLEncode Selected Text"
-			},
-			{
-				"command": "busybox.urldecode",
-				"title": "busybox: URLDecode Selected Text"
-			},
-			{
-				"command": "busybox.currentTimestamp",
-				"title": "busybox: Get Current Timestamp"
-			},
-			{
-				"command": "busybox.formatTimestamp",
-				"title": "busybox: Format Timestamp"
-			},
-			{
-				"command": "busybox.parseTimestamp",
-				"title": "busybox: Parse Timestamp"
-			},
-			{
-				"command": "busybox.centereditor",
-				"title": "busybox: Center Editor Window"
-			},
-			{
-				"command": "busybox.exceltojson",
-				"title": "busybox: Convert excel to json"
-			},
-			{
-				"command": "busybox.jsontoexcel",
-				"title": "busybox: Convert json to excel"
-			},
-			{
-				"command": "busybox.openInIdea",
-				"title": "busybox: Open in Idea"
-			}
-		],
-		"menus": {
-			"editor/context": [
-				{
-					"command": "busybox.openInIdea",
-					"group": "navigation@1",
-					"when": "editorFocus"
-				}
-			]
-		},
-		"keybindings": [
-			{
-				"command": "busybox.centereditor",
-				"key": "ctrl+l",
-				"mac": "ctrl+l",
-				"when": "editorTextFocus || findWidgetVisible"
-			}
-		]
-	},
-	"scripts": {
-		"lint": "eslint .",
-		"pretest": "npm run lint",
-		"test": "node ./test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.51.0",
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.0.0",
-		"@types/node": "^12.11.7",
-		"eslint": "^7.9.0",
-		"glob": "^7.1.6",
-		"mocha": "^8.1.3",
-		"typescript": "^4.0.2",
-		"vscode-test": "^1.4.0"
-	},
-	"vsce": {
-		"baseImagesUrl": "https://github.com/n-wen/busybox/raw/master"
-	}
+    "name": "busybox",
+    "displayName": "busybox",
+    "publisher": "wenning",
+    "repository": {
+        "url": "https://github.com/n-wen/busybox"
+    },
+    "description": "toolkits(json2go, base64 encode, decode, timestamp, excel etc.)",
+    "version": "0.8.0",
+    "icon": "busybox.png",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "Busybox",
+            "properties": {
+                "busybox.idea.cmd.path": {
+                    "type": "string",
+                    "default": "idea64",
+                    "description": "IntelliJ IDEA 命令路径，默认为 idea64。可以设置为完整路径，如：C:\\Program Files\\JetBrains\\IntelliJ IDEA\\bin\\idea64.exe"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "busybox.json2go",
+                "title": "busybox: Convert Selected JSON to Go Struct"
+            },
+            {
+                "command": "busybox.genjson",
+                "title": "busybox: Generate JSON from Go Struct"
+            },
+            {
+                "command": "busybox.b64encode",
+                "title": "busybox: Base64 Encode Selected Text"
+            },
+            {
+                "command": "busybox.b64decode",
+                "title": "busybox: Base64 Decode Selected Text"
+            },
+            {
+                "command": "busybox.urlencode",
+                "title": "busybox: URLEncode Selected Text"
+            },
+            {
+                "command": "busybox.urldecode",
+                "title": "busybox: URLDecode Selected Text"
+            },
+            {
+                "command": "busybox.currentTimestamp",
+                "title": "busybox: Get Current Timestamp"
+            },
+            {
+                "command": "busybox.formatTimestamp",
+                "title": "busybox: Format Timestamp"
+            },
+            {
+                "command": "busybox.parseTimestamp",
+                "title": "busybox: Parse Timestamp"
+            },
+            {
+                "command": "busybox.centereditor",
+                "title": "busybox: Center Editor Window"
+            },
+            {
+                "command": "busybox.exceltojson",
+                "title": "busybox: Convert excel to json"
+            },
+            {
+                "command": "busybox.jsontoexcel",
+                "title": "busybox: Convert json to excel"
+            },
+            {
+                "command": "busybox.openInIdea",
+                "title": "busybox: Open in Idea"
+            },
+            {
+                "command": "busybox.updateGlobalTags",
+                "title": "busybox: Update GNU Global Tags"
+            },
+            {
+                "command": "busybox.createGlobalDatabase",
+                "title": "busybox: Create GNU Global Database"
+            },
+            {
+                "command": "busybox.findGlobalDefinition",
+                "title": "busybox: Find Symbol Definition (GNU Global)"
+            },
+            {
+                "command": "busybox.findGlobalReferences",
+                "title": "busybox: Find Symbol References (GNU Global)"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "busybox.openInIdea",
+                    "group": "navigation@1",
+                    "when": "editorFocus"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "command": "busybox.centereditor",
+                "key": "ctrl+l",
+                "mac": "ctrl+l",
+                "when": "editorTextFocus || findWidgetVisible"
+            }
+        ]
+    },
+    "scripts": {
+        "lint": "eslint .",
+        "pretest": "npm run lint",
+        "test": "node ./test/runTest.js"
+    },
+    "dependencies": {
+        "child-process-promise": "^1.1.0",
+        "iconv-lite": "^0.4.13"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.51.0",
+        "@types/glob": "^7.1.3",
+        "@types/mocha": "^8.0.0",
+        "@types/node": "^12.11.7",
+        "eslint": "^7.9.0",
+        "glob": "^7.1.6",
+        "mocha": "^8.1.3",
+        "typescript": "^4.0.2",
+        "vscode-test": "^1.4.0"
+    },
+    "vsce": {
+        "baseImagesUrl": "https://github.com/n-wen/busybox/raw/master"
+    },
+    "license": "MIT"
 }

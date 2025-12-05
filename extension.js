@@ -3,6 +3,7 @@
 const vscode = require('vscode');
 const busybox = require("./src/busybox");
 
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
@@ -73,7 +74,7 @@ function activate(context) {
 		if (timeout) clearTimeout(timeout);
 
 		timeout = setTimeout(() => {
-			state = "center";
+			centereditorState = "center";
 		}, 1000);
 	}
 
@@ -122,6 +123,14 @@ function activate(context) {
 		busybox.openInIdea();
 	})
 	context.subscriptions.push(openInIdea)
+
+	// gnu global integration
+	busybox.registerGlobalProviders(context);
+	context.subscriptions.push(vscode.commands.registerCommand('busybox.updateGlobalTags', busybox.updateGlobalTags));
+	context.subscriptions.push(vscode.commands.registerCommand('busybox.createGlobalDatabase', busybox.createGlobalDatabase));
+	context.subscriptions.push(vscode.commands.registerCommand('busybox.findGlobalDefinition', busybox.findGlobalDefinition));
+	context.subscriptions.push(vscode.commands.registerCommand('busybox.findGlobalReferences', busybox.findGlobalReferences));
+
 }
 exports.activate = activate;
 
