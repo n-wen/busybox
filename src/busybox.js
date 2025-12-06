@@ -286,7 +286,7 @@ async function updateGlobalTags() {
       if (createDB === 'Create Database') {
         try {
           await globalIntegration.createDatabase();
-          vscode.window.showInformationMessage('GNU Global database created successfully in .vscode directory!');
+          vscode.window.showInformationMessage('GNU Global database created successfully!');
         } catch (createError) {
           vscode.window.showErrorMessage(`Failed to create GNU Global database: ${createError.message}`);
         }
@@ -305,7 +305,7 @@ async function updateGlobalTags() {
 async function createGlobalDatabase() {
   try {
     await globalIntegration.createDatabase();
-    vscode.window.showInformationMessage('GNU Global database created successfully in .vscode directory!');
+    vscode.window.showInformationMessage('GNU Global database created successfully!');
   } catch (error) {
     vscode.window.showErrorMessage(`Failed to create GNU Global database: ${error.message}`);
   }

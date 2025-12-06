@@ -292,8 +292,10 @@ class GlobalIntegration {
             fs.mkdirSync(dbPath, { recursive: true });
         }
 
-        // 使用 gtags 命令创建数据库，通过 GTAGSDBPATH 环境变量指定存储位置
-        await childProcess.exec('gtags', {
+        // 使用 gtags 命令创建数据库
+        // cwd 设为工作区根目录（源码所在位置），传递 dbPath 作为参数指定数据库存储位置
+        // 这样 gtags 会扫描工作区根目录的源码，但将 GTAGS/GRTAGS/GPATH 文件创建在 .vscode 目录
+        await childProcess.exec(`gtags "${dbPath}"`, {
             cwd: this.getWorkspaceRoot(),
             maxBuffer: 10 * 1024 * 1024,
             env: this.getEnvWithDbPath()
