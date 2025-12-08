@@ -83,7 +83,7 @@ class GlobalIntegration {
      * @returns {Promise<string>} 命令输出
      */
     async runCommand(params, cwd = null, env = null) {
-        const configuration = vscode.workspace.getConfiguration('codegnuglobal');
+        const configuration = vscode.workspace.getConfiguration('busybox.gnuGlobal');
         const encoding = configuration.get('encoding');
 
         const command = this.exec + ' ' + params.join(' ');
@@ -307,7 +307,7 @@ class GlobalIntegration {
      * @returns {Promise<void>}
      */
     async updateTags() {
-        const configuration = vscode.workspace.getConfiguration('codegnuglobal');
+        const configuration = vscode.workspace.getConfiguration('busybox.gnuGlobal');
         const shouldUpdate = configuration.get('autoupdate', true);
 
         if (!shouldUpdate) return;

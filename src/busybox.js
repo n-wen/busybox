@@ -247,6 +247,86 @@ function isGnuGlobalEnabled() {
 }
 
 /**
+ * 检查 GNU Global 自动更新是否启用
+ * @returns {boolean}
+ */
+function isAutoupdateEnabled() {
+  const config = vscode.workspace.getConfiguration('busybox');
+  return config.get('gnuGlobal.autoupdate', true);
+}
+
+/**
+ * 检查文件是否是源码文件（需要更新gtags）
+ * @param {string} fileName - 文件名
+ * @returns {boolean}
+ */
+function isSourceFile(fileName) {
+  const sourceExtensions = [
+    '.c', '.cpp', '.cxx', '.cc', '.c++',
+    '.h', '.hpp', '.hxx', '.hh', '.h++',
+    '.java', '.js', '.ts', '.go', '.py',
+    '.php', '.rb', '.rs', '.swift', '.m', '.mm'
+  ];
+
+  const ext = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+  return sourceExtensions.includes(ext);
+}
+
+/**
+ * 处理文件保存事件 - 自动更新GNU Global标签
+ * @param {vscode.TextDocument} document - 保存的文档
+ */
+async function onFileSaved(document) {
+  // 检查是否启用GNU Global和自动更新
+  if (!isGnuGlobalEnabled() || !isAutoupdateEnabled()) {
+    return;
+  }
+
+  // 检查是否是源码文件
+  if (!isSourceFile(document.fileName)) {
+    return;
+  }
+
+  // 检查文件是否在工作区中
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  if (!workspaceRoot) {
+    return;
+  }
+
+  const filePath = document.uri.fsPath;
+  const normalizedFilePath = filePath.replace(/\\/g, '/');
+  const normalizedWorkspaceRoot = workspaceRoot.replace(/\\/g, '/');
+
+  if (!normalizedFilePath.startsWith(normalizedWorkspaceRoot)) {
+    return;
+  }
+
+  // 检查文件是否存在且可读
+  const fs = require('fs');
+  try {
+    const stats = fs.statSync(filePath);
+    if (!stats.isFile()) {
+      return;  // 不是文件
+    }
+  } catch (error) {
+    // 文件不存在或无法访问，跳过更新
+    return;
+  }
+
+  try {
+    // 延迟一点时间，确保文件已完全保存
+    setTimeout(async () => {
+      await globalIntegration.updateTags();
+      // 可选：静默更新，不显示消息
+      // vscode.window.showInformationMessage('GNU Global tags updated automatically');
+    }, 300);
+  } catch (error) {
+    // 静默处理错误，避免频繁弹窗干扰用户
+    console.log('Auto update GNU Global tags failed:', error.message);
+  }
+}
+
+/**
  * 注册 GNU Global Providers
  * @param {vscode.ExtensionContext} context
  */
@@ -568,6 +648,7 @@ module.exports = {
   createGlobalDatabase,
   findGlobalDefinition,
   findGlobalReferences,
+  onFileSaved,  // 导出文件保存处理函数
   // Maven sources
   downloadMavenSources,
   extractMavenSources,

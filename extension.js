@@ -126,6 +126,11 @@ function activate(context) {
 
 	// gnu global integration
 	busybox.registerGlobalProviders(context);
+
+	// 监听文件保存事件，实现自动更新
+	const fileSaveDisposable = vscode.workspace.onDidSaveTextDocument(busybox.onFileSaved);
+	context.subscriptions.push(fileSaveDisposable);
+
 	context.subscriptions.push(vscode.commands.registerCommand('busybox.updateGlobalTags', busybox.updateGlobalTags));
 	context.subscriptions.push(vscode.commands.registerCommand('busybox.createGlobalDatabase', busybox.createGlobalDatabase));
 	context.subscriptions.push(vscode.commands.registerCommand('busybox.findGlobalDefinition', busybox.findGlobalDefinition));

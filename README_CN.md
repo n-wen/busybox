@@ -15,7 +15,7 @@
 
 ## GNU Global (gtags) 支持
 
-集成了 [GNU Global](https://www.gnu.org/software/global/) 代码导航功能，为 C/C++ 等语言提供快速的符号跳转和引用查找。
+集成了 [GNU Global](https://www.gnu.org/software/global/) 代码导航功能，为 JAVA 等语言提供快速的符号跳转和引用查找。
 
 ### 功能特性
 
@@ -27,6 +27,8 @@
 ### 使用方法
 
 1. 确保已安装 [GNU Global](https://www.gnu.org/software/global/)
+  - mac: `brew install global`
+  - windows: `scoop install global`
 2. **启用功能**，在 VSCode 设置中添加：
    ```json
    {

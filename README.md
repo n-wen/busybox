@@ -28,6 +28,8 @@ Integrated [GNU Global](https://www.gnu.org/software/global/) code navigation fo
 ### Usage
 
 1. Install [GNU Global](https://www.gnu.org/software/global/)
+  - mac: `brew install global`
+  - windows: `scoop install global`
 2. **Enable the feature** in VSCode settings:
    ```json
    {

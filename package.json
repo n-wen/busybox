@@ -31,6 +31,16 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Enable GNU Global (gtags) integration for code navigation. Requires GNU Global to be installed."
+                },
+                "busybox.gnuGlobal.autoupdate": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Automatically update GNU Global tags when files change."
+                },
+                "busybox.gnuGlobal.encoding": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Character encoding for GNU Global output (e.g., 'gb2312', 'utf8')."
                 }
             }
         },
