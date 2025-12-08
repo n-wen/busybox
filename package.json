@@ -6,7 +6,7 @@
         "url": "https://github.com/n-wen/busybox"
     },
     "description": "toolkits(json2go, base64 encode, decode, timestamp, excel etc.)",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "icon": "busybox.png",
     "engines": {
         "vscode": "^1.75.0"
