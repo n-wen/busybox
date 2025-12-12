@@ -94,6 +94,22 @@
                 "title": "busybox: Convert json to excel"
             },
             {
+                "command": "busybox.excel2csv",
+                "title": "busybox: Convert excel to csv"
+            },
+            {
+                "command": "busybox.csv2json",
+                "title": "busybox: Convert csv to json"
+            },
+            {
+                "command": "busybox.json2csv",
+                "title": "busybox: Convert json to csv"
+            },
+            {
+                "command": "busybox.csv2excel",
+                "title": "busybox: Convert csv to excel"
+            },
+            {
                 "command": "busybox.openInIdea",
                 "title": "busybox: Open in Idea"
             },

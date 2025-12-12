@@ -118,6 +118,27 @@ function activate(context) {
 	})
 	context.subscriptions.push(jsontoexcel)
 
+	// excel and csv conversion
+	let excel2csv = vscode.commands.registerCommand('busybox.excel2csv', function () {
+		busybox.excel2csv();
+	})
+	context.subscriptions.push(excel2csv)
+
+	let csv2json = vscode.commands.registerCommand('busybox.csv2json', function () {
+		busybox.csv2json();
+	})
+	context.subscriptions.push(csv2json)
+
+	let json2csv = vscode.commands.registerCommand('busybox.json2csv', function () {
+		busybox.json2csv();
+	})
+	context.subscriptions.push(json2csv)
+
+	let csv2excel = vscode.commands.registerCommand('busybox.csv2excel', function () {
+		busybox.csv2excel();
+	})
+	context.subscriptions.push(csv2excel)
+
 	// open in idea
 	let openInIdea = vscode.commands.registerCommand('busybox.openInIdea', function () {
 		busybox.openInIdea();

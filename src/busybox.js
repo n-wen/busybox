@@ -181,9 +181,85 @@ function jsontoexcel() {
     let { success, content } = excel.jsontoexcel(text)
     if (success) {
       editorBuilder.replace(selection, content);
-      vscode.window.showInformationMessage("Json Convert Excel Succeed!");
+      vscode.window.showInformationMessage("JSON Convert to Excel Succeed!");
     } else {
-      vscode.window.showErrorMessage("Json Convert Excel Fail!");
+      vscode.window.showErrorMessage("JSON Convert to Excel Fail!");
+    }
+  });
+}
+
+function excel2csv() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    let { success, content } = excel.excelToCsv(text)
+    if (success) {
+      editorBuilder.replace(selection, content);
+      vscode.window.showInformationMessage("Excel Convert to CSV Succeed!");
+    } else {
+      vscode.window.showErrorMessage("Excel Convert to CSV Fail!");
+    }
+  });
+}
+
+function csv2json() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    let { success, content } = excel.csvToJson(text)
+    if (success) {
+      editorBuilder.replace(selection, content);
+      vscode.window.showInformationMessage("CSV Convert to JSON Succeed!");
+    } else {
+      vscode.window.showErrorMessage("CSV Convert to JSON Fail!");
+    }
+  });
+}
+
+function json2csv() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    let { success, content } = excel.jsonToCsv(text)
+    if (success) {
+      editorBuilder.replace(selection, content);
+      vscode.window.showInformationMessage("JSON Convert to CSV Succeed!");
+    } else {
+      vscode.window.showErrorMessage("JSON Convert to CSV Fail!");
+    }
+  });
+}
+
+function csv2excel() {
+  var editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showErrorMessage("Only work in active editor!");
+    return; // No open text editor
+  }
+  var selection = editor.selection;
+  var text = editor.document.getText(selection);
+  editor.edit(editorBuilder => {
+    let { success, content } = excel.csv2excel(text)
+    if (success) {
+      editorBuilder.replace(selection, content);
+      vscode.window.showInformationMessage("CSV Convert to Excel Succeed!");
+    } else {
+      vscode.window.showErrorMessage("CSV Convert to Excel Fail!");
     }
   });
 }
@@ -641,6 +717,10 @@ module.exports = {
   toCenter,
   exceltojson,
   jsontoexcel,
+  excel2csv,
+  csv2json,
+  json2csv,
+  csv2excel,
   openInIdea,
   // GNU Global
   registerGlobalProviders,
